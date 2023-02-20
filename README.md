@@ -28,9 +28,9 @@ Once the script is running, you can use the following keyboard shortcuts:
 
 To customize the keyboard shortcuts, you can modify the mapping.txt file. The file contains a list of keyboard keys and their associated folders. Each line of the file should be in the format key:folder, where key is the keyboard key and folder is the name of the folder to move images to. For example:
 
-- a: Archive
-- f: Family
-- d: Delete
+- a:Archive
+- f:Family
+- d:Delete
 
 # Limitations
 

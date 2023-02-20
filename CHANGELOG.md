@@ -18,3 +18,15 @@ All notable changes to this project will be documented in this file.
 ### Changed
 
 ### Fixed
+
+## [0.1.1] - 2023-02-21
+
+### Added
+
+- Added the sequence number and total number, and the image file name as a label above the image.
+
+### Changed
+
+- Only display the preview immage for the previous and next image if it exists
+
+### Fixed

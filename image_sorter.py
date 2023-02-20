@@ -15,8 +15,8 @@ def prev_image():
     global index
     index = (index - 1) % len(image_list)
     load_image()
-# Function to rotate the current image 90 degrees clockwise
 
+# Function to rotate the current image 90 degrees clockwise
 def rotate_clockwise():
     global image_list, index
     image_path = image_list[index]
@@ -36,21 +36,46 @@ def rotate_counterclockwise():
 
 # Function to load the current image and its previews
 def load_image():
-    global image_list, index, image_label, prev_label, next_label
+    global image_list, index, image_label, prev_label, next_label, sequence_label
     image = Image.open(image_list[index])
     photo = ImageTk.PhotoImage(image)
     image_label.config(image=photo)
     image_label.image = photo
-    prev_image = Image.open(image_list[(index-1)%len(image_list)])
-    prev_image.thumbnail((prev_size, prev_size))
-    prev_photo = ImageTk.PhotoImage(prev_image)
-    prev_label.config(image=prev_photo)
-    prev_label.image = prev_photo
-    next_image = Image.open(image_list[(index+1)%len(image_list)])
-    next_image.thumbnail((prev_size, prev_size))
-    next_photo = ImageTk.PhotoImage(next_image)
-    next_label.config(image=next_photo)
-    next_label.image = next_photo
+
+    # Only display the preview label for the previous image if it exists
+    if index > 0:
+        prev_image = Image.open(image_list[index-1])
+        prev_image.thumbnail((prev_size, prev_size))
+        prev_photo = ImageTk.PhotoImage(prev_image)
+        prev_label.config(image=prev_photo)
+        prev_label.image = prev_photo
+    else:
+        prev_label.config(image='')
+        
+    # Only display the preview label for the next image if it exists
+    if index < len(image_list)-1:
+        next_image = Image.open(image_list[index+1])
+        next_image.thumbnail((prev_size, prev_size))
+        next_photo = ImageTk.PhotoImage(next_image)
+        next_label.config(image=next_photo)
+        next_label.image = next_photo
+    else:
+        next_label.config(image='')
+
+    # Add the sequence number and total number, and the image file name as a label above the image
+    sequence_text = f"{index+1} of {len(image_list)}, name: {os.path.basename(image_list[index])}"
+    sequence_label.destroy()
+    sequence_label = tk.Label(window, text=sequence_text, bg = "light green", font=("Arial", 12), )
+    sequence_label.config(text=sequence_text)
+
+    # update the position of the label based on the current text
+    sequence_label.update_idletasks()  # ensure that the label has been fully rendered
+    label_width = sequence_label.winfo_reqwidth()
+    label_height = sequence_label.winfo_reqheight()
+    x_pos = int(window_width * 0.5 - label_width / 2)
+    y_pos = int(window_height * 0.05)
+    sequence_label.place(x=x_pos, y=y_pos)
+    
     # Adjust the size and placement of the image label and preview labels
     image_width, image_height = image.size
     image_label_width = int(window_width * 0.8)
@@ -107,6 +132,7 @@ prev_size = int(min(window_width, window_height) * 0.1)
 image_label = tk.Label(window)
 prev_label = tk.Label(window)
 next_label = tk.Label(window)
+sequence_label = tk.Label(window)
 prev_label.pack()
 image_label.pack()
 next_label.pack()
